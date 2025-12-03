@@ -969,6 +969,29 @@
         if (credibilityBar) {
             observer.observe(credibilityBar);
         }
+        
+        // Format phone numbers to international standard (+1 format) for Mailchimp
+        function formatPhoneForMailchimp(phoneInput) {
+            phoneInput.addEventListener('blur', function() {
+                let phone = this.value.replace(/\D/g, ''); // Remove all non-digits
+                if (phone.length === 10) {
+                    // US number without country code, add +1
+                    this.value = '+1' + phone;
+                } else if (phone.length === 11 && phone.startsWith('1')) {
+                    // US number with 1 prefix, add +
+                    this.value = '+' + phone;
+                } else if (!phone.startsWith('+')) {
+                    // Add + if not present
+                    this.value = '+' + phone;
+                }
+            });
+        }
+        
+        // Apply phone formatting to both forms
+        const phoneInput1 = document.getElementById('phone');
+        const phoneInput2 = document.getElementById('phone2');
+        if (phoneInput1) formatPhoneForMailchimp(phoneInput1);
+        if (phoneInput2) formatPhoneForMailchimp(phoneInput2);
     </script>
 </body>
 </html>
